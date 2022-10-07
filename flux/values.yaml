@@ -1,0 +1,35 @@
+---
+drivesPerNode: 1
+environment:
+  MINIO_BROWSER: 'on'
+  MINIO_PROMETHEUS_AUTH_TYPE: public
+  MINIO_PROMETHEUS_URL: >-
+    http://prometheus-kube-prometheus-prometheus.monitoring-system.svc.cluster.local:9090
+image:
+  pullPolicy: Always
+makeUserJob:
+  extraVolumeMounts:
+  - mountPath: /etc/minio
+    name: minio-etc
+  extraVolumes:
+  - emptyDir:
+      sizeLimit: 10Mi
+    name: minio-etc
+  securityContext:
+    enabled: true
+    fsGroup: 10000
+    runAsGroup: 10000
+    runAsUser: 10000
+persistence:
+  size: 1Gi
+podAnnotations:
+  proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+replicas: 3
+securityContext:
+  fsGroup: 10000
+  runAsGroup: 10000
+  runAsUser: 10000
+users:
+- accessKey: harbor-s3
+  secretKey: s3cr3t
+  policy: readwrite

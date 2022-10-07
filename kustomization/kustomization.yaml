@@ -1,0 +1,12 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+patchesJson6902:
+- path: job-patch.yaml
+  target:
+    group: batch
+    kind: Job
+    name: harbor-s3-minio-make-user-job
+    version: v1
+resources:
+- template.yaml
